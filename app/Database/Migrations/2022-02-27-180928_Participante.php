@@ -62,6 +62,7 @@ class Participante extends Migration
                 'type'       => 'INT',
                 'constraint' => 11,
                 'unsigned'   => true,
+                'null'       => true,
             ],
             'id_ta'   => [
                 'type'       => 'INT',

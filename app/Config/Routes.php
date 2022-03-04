@@ -21,7 +21,7 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
-$routes->setAutoRoute(true);
+$routes->setAutoRoute(false);
 
 /*
  * --------------------------------------------------------------------
@@ -31,7 +31,27 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+/* $routes->get('/', 'Home::index');
+$routes->get('/create-user', 'UserController::createUser'); */
+
+$routes->get('/', 'AuthController::dashboard', ['filter' => 'authFilter']);
+$routes->get('login', 'AuthController::index', ['as' => 'login']);
+
+$routes->post('signin', 'AuthController::login', ['as' => 'signin']);
+$routes->get('logout', 'AuthController::logout', ['as' => 'logout']);
+
+$routes->group('/users', function ($routes) {
+    $routes->post('create-user-form', 'UserController::store', ['as' => 'create-user-form']);
+    $routes->get('search-users', 'UserController::findUsersByParams', ['as' => 'search-users']);
+    $routes->delete('user', 'UserController::deleteUserById');
+    $routes->get('user/(:num)', 'UserController::getUserById/$1');
+    $routes->post('user/(:num)', 'UserController::updateUserById/$1');
+
+    // Views
+    $routes->get('create-user', 'UserController::create', ['filter' => 'authFilter']);
+    $routes->get('', 'UserController::index', ['filter' => 'authFilter']);
+});
+
 
 /*
  * --------------------------------------------------------------------

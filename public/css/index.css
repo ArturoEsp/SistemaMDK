@@ -1,0 +1,203 @@
+*, ::after, ::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    font-size: 16px;
+}
+
+@media screen and (min-width: 320px) {
+    html {
+        font-size: calc(16px + 6 * ((100vw - 320px) / 680));
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    html {
+        font-size: 18px;
+    }
+}
+
+:root {
+    --color-black: #333333;
+    --color-yellow: #fcdb1a;
+    --color-green: #00653f;
+    --color-orange: #fe8100;
+    --color-red: #d00000;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+}
+
+input, select, button {
+    outline: 0;
+    border: 0;
+}
+
+h1, h2, h3, h4, span, p, label div, input, textarea, button, a, select, option,table, tr, td, th, label, div {
+    color: var(--color-black);
+    font-family: 'Roboto', sans-serif;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999 !important;
+  background-color: #cccccc !important;
+  color: #666666 !important;
+  cursor: not-allowed !important;
+}
+
+/* Layout Body Main Content */
+main.main-content {
+    background-image: url('../assets/images/back-1.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: 60px; 
+    height: 100%;
+    overflow: auto;
+    padding: 2rem 6rem;
+    width: 100vw;
+    
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        overflow: hidden;
+    }
+    
+    main.main-content {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Layout Header */
+header.header {
+    width: 100%;
+    min-height: 68px;
+    background-color: var(--color-black);
+    display: flex;
+    flex-direction: row;
+    padding: 10px 2rem;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+header.header .logo {
+    width: 58px;
+}
+
+header.header .logo img {
+    width: 100%;
+}
+
+header.header .menu_container .items {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    align-items: center;
+    gap: 18px;
+}
+
+header.header .menu_container .items li a {
+    color: rgba(255, 255, 255, 0.5);
+    position: relative;
+    letter-spacing: 1px;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+header.header .menu_container .items {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+header.header .menu_container .items * {
+    box-sizing: border-box;
+}
+
+header.header .menu_container .items li {
+    display: inline-block;
+    list-style: outside none none;
+    padding: 0;
+}
+
+header.header .menu_container .items a:before,
+header.header .menu_container .items a:after {
+    position: absolute;
+    -webkit-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+}
+
+header.header .menu_container .items a:before {
+    bottom: -1px;
+    display: block;
+    height: 3px;
+    width: 0%;
+    content: "";
+    background-color: var(--color-yellow);
+}
+
+header.header .menu_container .items a:after {
+    left: 0;
+    top: 0;
+    position: absolute;
+    content: attr(data-hover);
+    color: rgba(255, 255, 255, 1);
+    white-space: nowrap;
+    max-width: 0%;
+    overflow: hidden;
+    padding: 1px 0;
+}
+
+header.header .menu_container .items a:hover:before,
+header.header .menu_container .items .current a:before {
+    opacity: 1;
+    width: 100%;
+}
+
+header.header .menu_container .items a:hover:after,
+header.header .menu_container .items .current a:after {
+    max-width: 100%;
+}
+
+header.header .menu_container .items .button a:before {
+    background-color: transparent;
+}
+
+header.header .menu_container .items .button a {
+    display: inline-block;
+    padding: 6px 8px;
+    border-radius: 3px;
+    color: #fff;
+}
+
+
+header.header .menu_container .items .button.login a {
+    background-color: var(--color-green);
+}
+
+header.header .menu_container .items .button.logout a {
+    background-color: var(--color-red);
+}

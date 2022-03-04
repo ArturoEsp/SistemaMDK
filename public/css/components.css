@@ -1,0 +1,374 @@
+/* Wrapper Content */
+
+.wrapper_boxs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 18px;
+    height: 100%;
+}
+
+/*******************/
+
+/* Box Content */
+
+.box-content {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 28px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 1);
+    overflow: auto;
+}
+
+.box-content.startFlex {
+    justify-content: flex-start;
+}
+
+.box-content.w480{
+    width: 480px;
+}
+
+.box-content .title {
+    width: 100%;
+    text-align: center;
+}
+
+.box-content .title h2 {
+    font-size: 1.4rem;
+}
+
+.box-content .title span {
+    opacity: 0.8;
+    font-weight: 500;
+    display: inline-block;
+    position: relative;
+    font-size: 0.88rem;
+}
+
+.box-content .title span::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    width: 50%;
+    left: 25%;
+    right: 25%;
+    height: 4px;
+    background-color: var(--color-yellow);
+}
+
+.box-content>.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 0;
+    gap: 18px;
+}
+
+@media screen and (max-width: 768px) {
+    .box-content {
+        width: 100%;
+    }
+}
+
+/***************/
+
+
+/* Form */
+
+form.Form {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+}
+
+form.Form.max768 {
+    max-width: 768px;
+}
+
+form.Form .group-input {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+}
+
+form.Form .input {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+form.Form .input label {
+    font-size: .8rem;
+    font-weight: 500;
+}
+
+form.Form .input input,
+form.Form .input select {
+    font-size: 0.8222rem;
+    padding: 8px 12px;
+    border-radius: 3px;
+    box-shadow: rgba(9, 30, 66, 0) 0px 4px 8px -2px, rgba(9, 30, 66, 0.2) 0px 0px 0px 1px;
+    transition: all .25s ease-in-out;
+}
+
+form.Form .input select {
+    padding: 6px 12px;
+}
+
+form.Form .input input:hover,
+form.Form .input input:active,
+form.Form .input input:focus,
+form.Form .input select:hover,
+form.Form .input select:active,
+form.Form .input select:focus {
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.2) 0px 0px 0px 1px;
+}
+
+form.Form .input label.error {
+    color: var(--color-red);
+    font-size: 11px;
+}
+
+form.Form .group-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+form.Form .group-buttons button {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    line-height: 20px;
+    font-weight: 400;
+    line-height: 20px;
+    padding: 6px 16px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    white-space: nowrap;
+    appearance: none;
+    cursor: pointer;
+}
+
+form.Form .group-buttons button.success {
+    background-color: var(--color-green);
+    color: #fff;
+    border: 1px solid rgba(27, 31, 35, .15);
+}
+
+form.Form .group-buttons button.cancel {
+    background-color: var(--color-red);
+    color: #fff;
+    box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+}
+
+
+@media screen and (max-width: 768px) {
+    form.Form.max768 {
+        max-width: 100%;
+    }
+
+    form.Form .group-input {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+}
+
+/********/
+
+
+/* Form Search Filter */
+.filter-search  {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.filter-search .search-input {
+    background-color: #fff;
+    border: 1px solid #C3C6D1;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 30px;
+    padding-left: 2px;
+}
+
+.filter-search .search-input input {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+}
+
+.filter-search .search-input button {
+    background-color: #C3C6D1;
+    color: #fff;
+    height: 100%;
+    width: 30px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all .20s ease-in-out;
+}
+
+.filter-search .search-input button:hover {
+    background-color: #bcbdc0;
+}
+
+.filter-search .dropdown-list {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.filter-search .dropdown-list span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #C3C6D1;
+}
+
+.filter-search .dropdown-list select{
+    background-color: #fff;
+    border: 1px solid #C3C6D1;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    height: 30px;
+    min-width: 120px;
+    max-width: 180px;
+}
+
+.filter-search .buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-search .buttons .button-a {
+    font-size: 0.8rem;
+    background-color: #1a88e2;
+    height: 100%;
+    padding: 6px 8px;
+    color: #fff;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+/**********************/
+
+
+/* Table */
+.table {
+    width: 100%;
+}
+
+.table table {
+    width: 100%;
+    border: 2px solid #ddd !important;
+    text-align: left;
+    font-size: 0.82rem;
+    border-radius: 6px;
+    border-collapse: collapse;
+}
+
+
+.table table thead tr th{
+    padding: 8px 10px;
+    border-bottom: 2px solid #ddd;
+    border-right: 1px solid #ddd;
+    font-weight: 500;
+}
+
+.table table tbody tr{
+    display: table-row;
+}
+
+.table table tbody tr td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    font-size: .76rem;
+}
+
+.table table tbody tr td.options div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.table table tbody tr td.options div button {
+    background-color: transparent;
+    font-size: 0.67rem;
+    padding: 5px 7px;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.table table tbody tr td.options div button.edit {
+    background-color: #FFBA08;
+}
+
+.table table tbody tr td.options div button.delete{
+    background-color: #DC2F02;
+}
+
+/*********/
+
+/* Dashboard Styles */
+
+div.dashboard-div {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr) );
+    gap: 38px;
+}
+
+div.dashboard-div .icon {
+    height: 100%;
+    width: 100;
+}
+
+div.dashboard-div .icon a {
+    font-size: 2.4rem;
+}
+
+/*******************/
+
+
+/* Login Styles */
+
+div.login-div {
+    display: grid;
+    place-content: center;
+    height: 100%;
+}
+
+/****************/
