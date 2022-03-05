@@ -12,5 +12,6 @@ class InsertData extends Seeder
         $this->call('TiposAlumno');
         $this->call('Categorias');
         $this->call('Niveles');
+        $this->call('Users');
     }
 }
