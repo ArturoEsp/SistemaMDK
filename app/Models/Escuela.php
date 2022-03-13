@@ -34,4 +34,9 @@ class Escuela extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getSchoolsByTeacher ($id) 
+    {
+        return $this->where('id_participante', $id)->findAll();
+    }
 }

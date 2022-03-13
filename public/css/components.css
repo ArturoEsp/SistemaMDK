@@ -3,9 +3,9 @@
 .wrapper_boxs {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: auto;
     gap: 18px;
-    height: 100%;
+    
 }
 
 /*******************/
@@ -120,6 +120,7 @@ form.Form .input select {
     border-radius: 3px;
     box-shadow: rgba(9, 30, 66, 0) 0px 4px 8px -2px, rgba(9, 30, 66, 0.2) 0px 0px 0px 1px;
     transition: all .25s ease-in-out;
+    width: 100%;
 }
 
 form.Form .input select {
@@ -372,3 +373,60 @@ div.login-div {
 }
 
 /****************/
+
+
+/* Wrapper Students */
+.wrapper_students {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-gap: 12px;
+}
+
+.wrapper_students .item {
+    width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    display: flex;
+    flex-direction: row;
+    gap: 28px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 5px;
+}
+
+.wrapper_students .item .photo {
+    max-width: 72px;
+    width: 70px;
+}
+
+.wrapper_students .item .photo img {
+    width: 100%;
+}
+
+.wrapper_students .item .information {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper_students .item .information .row {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px;
+}
+
+.wrapper_students .item .information .row.green {
+    background-color: var(--color-green);
+}
+
+.wrapper_students .item .information .row.green span {
+    color: #fff;
+}
+
+.wrapper_students .item .information .row span{
+    font-size: 0.88rem;
+}

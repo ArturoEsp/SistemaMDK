@@ -17,11 +17,11 @@ $URI = service('request')->uri->getPath();
                 if ($session->get('menu')['usuarios'])
                     echo "<li class='". ($URI === 'users' ? 'current' : null) ."'><a href='/users' rel='noopener noreferrer' data-hover='Usuarios'>Usuarios</a></li>";
                 if ($session->get('menu')['escuelas'])
-                    echo ' <li><a href="" rel="noopener noreferrer" data-hover="Escuelas">Escuelas</a></li>';
+                    echo "<li  class='". ($URI === 'escuelas' ? 'current' : null) ."'><a href='/escuelas' rel='noopener noreferrer' data-hover='Escuelas'>Escuelas</a></li>";
                 if ($session->get('menu')['areas'])
                     echo '<li><a href="" rel="noopener noreferrer" data-hover="Areas">Areas</a></li>';
                 if ($session->get('menu')['participantes'])
-                    echo '<li><a href="" rel="noopener noreferrer" data-hover="Participantes">Participantes</a></li>';
+                    echo '<li><a href="/participantes" rel="noopener noreferrer" data-hover="Participantes">Participantes</a></li>';
                 if ($session->get('menu')['eventos'])
                     echo '<li><a href="" rel="noopener noreferrer" data-hover="Eventos">Eventos</a></li>';
                 if ($session->get('menu')['pase_lista'])

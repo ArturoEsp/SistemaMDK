@@ -4,17 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TipoAlumno extends Model
+class EstudiantesEscuela extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'tipo_alumno';
-    protected $primaryKey       = 'id_ta';
+    protected $table            = 'estudiantes_escuela';
     protected $useAutoIncrement = true;
-    protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
-    protected $allowedFields    = ['ta_descrip'];
+    protected $protectFields    = false;
+    protected $allowedFields    = ['id_escuela', 'id_estudiante'];
 
     // Dates
     protected $useTimestamps = false;

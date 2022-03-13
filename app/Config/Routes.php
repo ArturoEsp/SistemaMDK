@@ -53,6 +53,28 @@ $routes->group('/users', function ($routes) {
 });
 
 
+$routes->group('/escuelas', function ($routes) {
+    $routes->post('save', 'EscuelaController::store');
+    $routes->get('teachers', 'EscuelaController::getListTeachers');
+    $routes->get('all', 'EscuelaController::getSchools');
+    $routes->delete('(:num)', 'EscuelaController::deleteSchool/$1');
+
+    // Views
+    $routes->get('', 'EscuelaController::index', ['filter' => 'authFilter']);
+});
+
+$routes->group('/participantes', function ($routes) {
+    $routes->get('escuela/(:num)', 'AlumnoController::getParticipantesByEscuela/$1');
+    $routes->post('save', 'AlumnoController::store');
+
+    $routes->get('categories/(:any)/(:any)', 'AlumnoController::getCategoriesByGenreAndWeight/$1/$2');
+    $routes->get('levels/(:any)', 'AlumnoController::getLevelsByAge/$1');
+
+    // Views
+    $routes->get('', 'AlumnoController::participantesView', ['filter' => 'authFilter']);
+});
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

@@ -77,7 +77,7 @@ $session = session();
             </div>
             <div class="wrapper">
                 <div class="icon">
-                    <a href=""><i class="fa-solid fa-medal"></i></a>
+                    <a href="/participantes"><i class="fa-solid fa-medal"></i></a>
                 </div>
             </div>
         </div>

@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TipoAlumno extends Model
+class Nivel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'tipo_alumno';
-    protected $primaryKey       = 'id_ta';
+    protected $table            = 'nivel';
+    protected $primaryKey       = 'id_nivel';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['ta_descrip'];
+    protected $allowedFields    = ['descrip_niv','rango','min_rango','max_rango'];
 
     // Dates
     protected $useTimestamps = false;
@@ -35,4 +35,13 @@ class TipoAlumno extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getLevelsByFilter ($age = 0)
+    {
+
+        $findLevels = $this->where('min_rango <=', $age)
+                                ->where('max_rango >=', $age)
+                                ->findAll();
+        return $findLevels;
+    }
 }
