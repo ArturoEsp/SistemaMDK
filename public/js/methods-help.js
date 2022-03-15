@@ -155,3 +155,53 @@ function AJAXStudentsBySchool (id, callBack) {
         }
     });
 }
+
+// Areas
+
+function AJAXSaveArea (data, callBack) {
+    $.ajax({
+        method: 'POST',
+        url: `${base_url}/areas/save`,
+        dataType: "json",
+        data: data,
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXUpdateArea (id, data, callBack) {
+
+    $.ajax({
+        method: 'POST',
+        url: `${base_url}/areas/update/${id}`,
+        dataType: "json",
+        data: data,
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXDeleteArea (id, callBack) {
+
+    $.ajax({
+        method: 'DELETE',
+        url: `${base_url}/areas/delete/${id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXGetAllAreas (callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/areas/all`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}

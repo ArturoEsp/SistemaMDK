@@ -49,7 +49,7 @@ $session = session();
             </div>
             <div class="wrapper">
                 <div class="icon">
-                    <a href=""><i class="fa-solid fa-clone"></i></a>
+                    <a href="/areas"><i class="fa-solid fa-clone"></i></a>
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@ $session = session();
             </div>
             <div class="wrapper">
                 <div class="icon">
-                    <a href=""><i class="fa-solid fa-house-chimney-window"></i></a>
+                    <a href="/escuelas"><i class="fa-solid fa-house-chimney-window"></i></a>
                 </div>
             </div>
         </div>

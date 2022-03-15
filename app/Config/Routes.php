@@ -74,6 +74,17 @@ $routes->group('/participantes', function ($routes) {
     $routes->get('', 'AlumnoController::participantesView', ['filter' => 'authFilter']);
 });
 
+$routes->group('/areas', function ($routes) {
+    $routes->post('save', 'AreaController::store');
+    $routes->get('all', 'AreaController::getAllAreas');
+    $routes->post('update/(:num)', 'AreaController::update/$1');
+    $routes->delete('delete/(:num)', 'AreaController::delete/$1');
+
+
+    // Views
+    $routes->get('', 'AreaController::index', ['filter' => 'authFilter']);
+});
+
 
 /*
  * --------------------------------------------------------------------
