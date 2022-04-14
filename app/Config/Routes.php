@@ -66,12 +66,16 @@ $routes->group('/escuelas', function ($routes) {
 $routes->group('/participantes', function ($routes) {
     $routes->get('escuela/(:num)', 'AlumnoController::getParticipantesByEscuela/$1');
     $routes->post('save', 'AlumnoController::store');
+    $routes->post('update/(:num)', 'AlumnoController::update/$1');
 
     $routes->get('categories/(:any)/(:any)', 'AlumnoController::getCategoriesByGenreAndWeight/$1/$2');
     $routes->get('levels/(:any)', 'AlumnoController::getLevelsByAge/$1');
+    $routes->get('(:num)', 'AlumnoController::getParticipanteById/$1');
 
     // Views
     $routes->get('', 'AlumnoController::participantesView', ['filter' => 'authFilter']);
+    $routes->get('registro-evento', 'AlumnoController::registroEvento', ['filter' => 'authFilter']);
+    $routes->get('edit', 'AlumnoController::editParticipanteView', ['filter' => 'authFilter']);
 });
 
 $routes->group('/areas', function ($routes) {
@@ -85,6 +89,34 @@ $routes->group('/areas', function ($routes) {
     $routes->get('', 'AreaController::index', ['filter' => 'authFilter']);
 });
 
+$routes->group('/eventos', function ($routes) {
+    $routes->post('save', 'EventoController::store');
+    $routes->get('escuela/(:num)/mod/(:num)/participantes-disponibles', 'AlumnoController::getParticipantesForEvent/$1/$2');
+    $routes->get('escuela/(:num)/participantes/mod/(:num)', 'EventoController::getParticipantesInEventBySchoolAndMod/$1/$2');
+    $routes->post('register', 'EventoController::registerParticipantes');
+    $routes->delete('participante/(:num)', 'EventoController::deleteParticipanteEvento/$1');
+
+    // Views
+    $routes->get('', 'EventoController::index', ['filter' => 'authFilter']);
+    $routes->get('nuevo', 'EventoController::crearEvento', ['filter' => 'authFilter']);
+});
+
+$routes->group('/graficas', function ($routes) {
+
+    $routes->post('participantes/params', 'GraficaController::getParticipantesForParams');
+    $routes->post('store', 'GraficaController::store');
+    $routes->get('info/(:num)', 'GraficaController::getGraficaMatchs/$1');
+
+    // Views
+    $routes->get('', 'GraficaController::index', ['filter' => 'authFilter']);
+    $routes->get('nueva', 'GraficaController::create_grafica', ['filter' => 'authFilter']);
+    $routes->get('view/(:num)', 'GraficaController::view_grafica/$1', ['filter' => 'authFilter']);
+    $routes->get('edit/(:num)', 'GraficaController::edit_grafica/$1', ['filter' => 'authFilter']);
+});
+
+$routes->group('/matchs', function ($routes) {
+    $routes->post('update', 'MatchController::update');
+});
 
 /*
  * --------------------------------------------------------------------

@@ -4,11 +4,18 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Database\Seeds\TiposUsuario;
+use App\Models\Evento;
 use App\Models\Participante;
 use App\Models\TipoUsuario;
 
 class AuthController extends BaseController
 {
+    private $eventoModel;
+
+    public function __construct()
+    {
+        $this->eventoModel = new Evento();
+    }
 
     public function index()
     {
@@ -30,6 +37,7 @@ class AuthController extends BaseController
         $password = $this->request->getVar('password');
 
         $find = $userModel->where('usuario', $username)->first();
+        $event = $this->eventoModel->eventInProcess();
 
         if ($find) {
             $pass = $find['contrasena'];
@@ -46,7 +54,10 @@ class AuthController extends BaseController
                 $typeUser = $typeUserModel->where('id_tu', $find['id_tu'])->first();
                 $menuRol = $userModel->setMenuRol($typeUser['tu_descrip']);
                 
-                $session->set(['menu' => $menuRol, 'data_user' => $session_data]);
+                $session->set(['menu' => $menuRol, 
+                'data_user' => $session_data, 
+                'event' => $event]);
+                
                 return redirect()->to('/');
 
             } else {
@@ -64,6 +75,7 @@ class AuthController extends BaseController
         $session = session();
         $session->remove('data_user');
         $session->remove('menu');
+        $session->remove('event');
 
         return redirect()->to('/');
     }

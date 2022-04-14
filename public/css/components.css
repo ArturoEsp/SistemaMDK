@@ -5,7 +5,8 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
     gap: 18px;
-    
+    grid-template-rows: 1fr;
+    max-height: 100%;
 }
 
 /*******************/
@@ -21,6 +22,7 @@
     justify-content: center;
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 1);
+    height: 100%;
     overflow: auto;
 }
 
@@ -141,7 +143,8 @@ form.Form .input label.error {
     font-size: 11px;
 }
 
-form.Form .group-buttons {
+form.Form .group-buttons,
+.group-buttons {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -150,7 +153,8 @@ form.Form .group-buttons {
     gap: 12px;
 }
 
-form.Form .group-buttons button {
+form.Form .group-buttons button,
+.group-buttons button {
     padding: 4px 8px;
     font-size: 0.8rem;
     border-radius: 4px;
@@ -170,13 +174,15 @@ form.Form .group-buttons button {
     cursor: pointer;
 }
 
-form.Form .group-buttons button.success {
+form.Form .group-buttons button.success,
+.group-buttons button.success {
     background-color: var(--color-green);
     color: #fff;
     border: 1px solid rgba(27, 31, 35, .15);
 }
 
-form.Form .group-buttons button.cancel {
+form.Form .group-buttons button.cancel,
+.group-buttons button.cancel {
     background-color: var(--color-red);
     color: #fff;
     box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
@@ -411,6 +417,19 @@ div.login-div {
     width: 100%;
 }
 
+.wrapper_students .item .photo .edit {
+    text-align: center;
+}
+
+.wrapper_students .item .photo .edit a {
+    color: #1a88e2;
+    font-size: 13px;
+}
+
+.wrapper_students .item .photo .edit a:hover {
+    text-decoration: underline;
+}
+
 .wrapper_students .item .information {
     width: 100%;
     display: flex;
@@ -436,4 +455,163 @@ div.login-div {
 
 .wrapper_students .item .information .row span{
     font-size: 0.88rem;
+}
+
+
+.wrapper_students .item-event {
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: 5px;
+    gap: 16px;
+}
+
+.wrapper_students .item-event .photo {
+    max-width: 42px;
+    border-radius: 50%;
+    overflow: auto;
+    display: grid;
+    place-content: center;
+}
+
+.wrapper_students .item-event .photo img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+.wrapper_students .item-event .details {
+    font-size: 0.89rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.wrapper_students .item-event .details .status {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 500;
+    background-color: var(--color-yellow);
+    color: #fff;
+}
+
+.wrapper_students .item-event .details .buttons button {
+    display: grid;
+    place-content: center;
+    padding: 5px 6px;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.wrapper_students .item-event .details .buttons button:hover {
+    background-color: #eee;
+}
+
+
+/* Message Error */
+
+.message-error {
+    background-color: #F8D7DA;
+    border: 1px solid #F5C6CB;
+    width: 100%;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+}
+
+.message-error span,
+.message-error i {
+    color: #9D1C59;
+    font-size: 0.89rem;
+}
+
+/* MultiSelectJS */
+
+.ms-container {
+    width: 100% !important;
+}
+
+.ms-container .custom-header {
+    padding: 4px 6px;
+    font-size: 0.866rem;
+    font-weight: 500;
+}
+
+
+/* Wrapper Matchs */
+
+.wrapper_matchs {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+}
+
+.wrapper_matchs .match_round {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.wrapper_matchs .match_round h2 {
+    font-size: 1rem;
+}
+
+.wrapper_matchs .match_round .matchs {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+}
+
+.wrapper_matchs .match_round .matchs span{
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    color: var(--color-red);
+}
+
+.wrapper_matchs .match_round .matchs .player {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    max-width: 100%;
+}
+
+.wrapper_matchs .match_round .matchs .player input{
+    font-size: .88rem;
+    max-width: 80px;
+    border: 1px solid #adb5bd;
+    padding: 4px 6px;
+    border-radius: 3px;
+}
+
+.wrapper_matchs .match_round .matchs .player select{
+    border: 1px solid #adb5bd;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.wrapper_matchs .match_round .btn_save {
+    background-color: var(--color-green);
+    padding: 8px 8px;
+    font-size: 0.89rem;
+    font-weight: 500;
+    color: #fff;
+    width: auto;
+    cursor: pointer;
 }

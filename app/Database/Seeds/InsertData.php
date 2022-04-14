@@ -14,5 +14,6 @@ class InsertData extends Seeder
         $this->call('Niveles');
         $this->call('Users');
         $this->call('Grados');
+        $this->call('Modalidades');
     }
 }

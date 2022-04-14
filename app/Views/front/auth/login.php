@@ -25,7 +25,13 @@
                 <div class="group-buttons">
                     <button class="success" type="submit">Entrar</button>
                 </div>
-                <?= $session->getFlashdata('msg'); ?>
+                <?php if($session->getFlashdata('msg')) : ?>
+                    <div class="message-error">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span><?= $session->getFlashdata('msg'); ?></span>
+                </div>
+                <?php endif; ?>
+                
             </form>
         </div>
     </div>

@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class EstudiantesEscuela extends Model
+class Grafica extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'estudiantes_escuela';
+    protected $table            = 'graficas';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = false;
-    protected $allowedFields    = ['id_escuela', 'id_estudiante'];
+    protected $protectFields    = true;
+    protected $allowedFields    = ['nombre', 'modalidad_id', 'nivel_id', 'evento_id', 'ganador_id', 'no_participantes', 'status'];
 
     // Dates
     protected $useTimestamps = false;
@@ -35,4 +35,5 @@ class EstudiantesEscuela extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
 }

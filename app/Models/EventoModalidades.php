@@ -4,17 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class EstudiantesEscuela extends Model
+class EventoModalidades extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'estudiantes_escuela';
-    protected $primaryKey       = 'id';
-    protected $useAutoIncrement = true;
+    protected $table            = 'evento_modalidades';
+    protected $useAutoIncrement = false;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = false;
-    protected $allowedFields    = ['id_escuela', 'id_estudiante'];
+    protected $protectFields    = true;
+    protected $allowedFields    = ['id_evento', 'id_modalidad'];
 
     // Dates
     protected $useTimestamps = false;

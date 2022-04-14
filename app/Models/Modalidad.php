@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class EstudiantesEscuela extends Model
+class Modalidad extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'estudiantes_escuela';
-    protected $primaryKey       = 'id';
+    protected $table            = 'modalidades';
+    protected $primaryKey       = 'id_modalidad';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = false;
-    protected $allowedFields    = ['id_escuela', 'id_estudiante'];
+    protected $protectFields    = true;
+    protected $allowedFields    = ['modalidad'];
 
     // Dates
     protected $useTimestamps = false;
@@ -35,4 +35,10 @@ class EstudiantesEscuela extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    public function getModalidades ()
+    {
+        return $this->findAll();
+    }
 }

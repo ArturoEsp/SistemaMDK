@@ -156,6 +156,31 @@ function AJAXStudentsBySchool (id, callBack) {
     });
 }
 
+function AJAXStudentById (id, callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/participantes/${id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXUpdateStudent (id, data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        contentType: false,
+        processData: false,
+        url: `${base_url}/participantes/update/${id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
 // Areas
 
 function AJAXSaveArea (data, callBack) {
@@ -205,3 +230,113 @@ function AJAXGetAllAreas (callBack) {
         }
     });
 }
+
+// Eventos
+function AJAXSaveEvent (data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: `${base_url}/eventos/save`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXGetAvailablesStudents (id_escuela, id_mod, callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/eventos/escuela/${id_escuela}/mod/${id_mod}/participantes-disponibles`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXRegisterStudentsEvent (data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: `${base_url}/eventos/register`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXGetStudentsInEventBySchoolMod (school_id, mod_id, callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/eventos/escuela/${school_id}/participantes/mod/${mod_id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXDeleteParticipanteEvent (registro_id, callBack) {
+    $.ajax({
+        method: 'DELETE',
+        url: `${base_url}/eventos/participante/${registro_id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+
+// Eventos
+
+function AJAXParticipantesParamsGrafica(data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: `${base_url}/graficas/participantes/params`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXCreateGrafica(data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: `${base_url}/graficas/store`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXGetMatchsGrafica(id, callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/graficas/info/${id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXUpdateMatch(data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: `${base_url}/matchs/update`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+

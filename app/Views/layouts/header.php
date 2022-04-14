@@ -21,9 +21,9 @@ $URI = service('request')->uri->getPath();
                 if ($session->get('menu')['areas'])
                     echo "<li  class='" . ($URI === 'areas' ? 'current' : null) . "'><a href='/areas' rel='noopener noreferrer' data-hover='Areas'>Areas</a></li>";
                 if ($session->get('menu')['participantes'])
-                    echo '<li><a href="/participantes" rel="noopener noreferrer" data-hover="Participantes">Participantes</a></li>';
+                    echo "<li class='" . ($URI === 'participantes' ? 'current' : null) . "'><a href='/participantes' rel='noopener noreferrer' data-hover='Participantes'>Participantes</a></li>";
                 if ($session->get('menu')['eventos'])
-                    echo '<li><a href="" rel="noopener noreferrer" data-hover="Eventos">Eventos</a></li>';
+                    echo '<li><a href="/eventos" rel="noopener noreferrer" data-hover="Eventos">Eventos</a></li>';
                 if ($session->get('menu')['pase_lista'])
                     echo '<li><a href="" rel="noopener noreferrer" data-hover="Asistencia">Asistencia</a></li>';
                 if ($session->get('menu')['graficas'])

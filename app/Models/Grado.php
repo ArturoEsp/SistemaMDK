@@ -4,20 +4,24 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class EstudiantesEscuela extends Model
+class Grado extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'estudiantes_escuela';
-    protected $primaryKey       = 'id';
+    protected $table            = 'grados';
+    protected $primaryKey       = 'id_grado';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = false;
-    protected $allowedFields    = ['id_escuela', 'id_estudiante'];
+    protected $protectFields    = true;
+    protected $allowedFields    = ['nom_grado'];
 
     // Dates
     protected $useTimestamps = false;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
 
     // Validation
     protected $validationRules      = [];

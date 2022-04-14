@@ -70,18 +70,29 @@
                     </div>
                 </div>
 
-                <div class="input">
-                    <label for="school_id">Escuela asignada</label>
-                    <select name="school_id" id="school_id">
-                        <option disabled selected>** SELECCIONA ESCUELA **</option>
-                        <?php foreach ($schools as $value) : ?>
-                            <option value="<?= $value['id_escuela'] ?>"><?= $value['nombre'] ?></option>
-                        <?php endforeach ?>
-                    </select>
+                <div class="group-input">
+                    <div class="input">
+                        <label for="school_id">Escuela asignada</label>
+                        <select name="school_id" id="school_id">
+                            <option disabled selected>** SELECCIONA ESCUELA **</option>
+                            <?php foreach ($schools as $value) : ?>
+                                <option value="<?= $value['id_escuela'] ?>"><?= $value['nombre'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                    <div class="input">
+                        <label for="grade_id">Grado actual</label>
+                        <select name="grade_id" id="grade_id">
+                            <option disabled selected>** SELECCIONA GRADO **</option>
+                            <?php foreach ($grados as $value) : ?>
+                                <option value="<?= $value['id_grado'] ?>"><?= $value['nom_grado'] ?></option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="input">
-                    <label for="photo">Fotografiá</label>
+                    <label for="photo">Fotografía</label>
                     <input type="file" name="photo" id="photo">
                 </div>
 
@@ -94,18 +105,16 @@
 
     <div class="box-content startFlex">
         <div class="title">
-            <h2>Participantes de</h2>
-            <span>Lista de participantes registrados</span>
+            <h2>Participantes</h2>
+            <span>Lista de participantes de mis escuelas</span>
         </div>
         <div class="wrapper">
             <div class="filter-search">
-                <div class="search-input">
-                    <input type="text" id="search" placeholder="Buscar...">
-                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                <div class="buttons">
+                    <a class="button-a" id="a-register" href="participantes/registro-evento">Registrar a evento</a>
                 </div>
-
                 <div class="dropdown-list">
-                <select name="filter_school" id="filter_school">
+                    <select name="filter_school" id="filter_school">
                         <?php foreach ($schools as $value) : ?>
                             <option selected value="<?= $value['id_escuela'] ?>"><?= $value['nombre'] ?></option>
                         <?php endforeach ?>
@@ -132,7 +141,12 @@
                 $('#students').append(`
             <div class="item">
                     <div class="photo">
-                        <img src="uploads/${e.fotografia ? e.fotografia : 'custom.png'}" alt="">
+                        <div class="image">
+                            <img src="uploads/${e.fotografia ? e.fotografia : 'custom.png'}" alt="">
+                        </div>
+                        <div class="edit">
+                            <a href="participantes/edit?s=${btoa(e.id_alumno)}">Editar</a>
+                        </div>
                     </div>
                     <div class="information">
                         <div class="row green">
@@ -141,15 +155,15 @@
                         </div>
                         <div class="row ">
                             <span>${e.edad} años</span>
-                            <span>Control # 1</span>
+                            <span><a href="#">Grados</a></span>
                         </div>
                         <div class="row green">
                             <span>${e.sexo === '1' ? 'Mujer' : 'Hombre'}</span>
                             <span>${e.altura} cm., ${e.peso} kg.</span>
                         </div>
                         <div class="row ">
-                            <span>Alissa</span>
-                            <span>Control # 1</span>
+                            <span>Categoría: ${e.nom_cat}</span>
+                            <span>Nivel: ${e.descrip_niv}</span>
                         </div>
                     </div>
                 </div>
@@ -159,8 +173,9 @@
         })
     }
     $(document).ready(function() {
-
-        listStudents($('#filter_school').val());
+        const school_id = $('#filter_school').val();
+        listStudents(school_id);
+        $("#a-register").attr('href', `participantes/registro-evento?id=${school_id}`)
 
         $('#weight').keyup(function(e) {
             listCategories(this.value, null)
@@ -178,6 +193,7 @@
 
         $('#filter_school').change(function(e) {
             e.preventDefault();
+            $("#a-register").attr('href', `participantes/registro-evento?id=${this.value}`)
             listStudents(this.value);
         });
 
@@ -190,7 +206,8 @@
                 weight: "required",
                 height: "required",
                 type_student: "required",
-                school_id: 'required'
+                school_id: 'required',
+                grade_id: 'required'
             },
             messages: {
                 name: {
@@ -213,6 +230,9 @@
                 },
                 school_id: {
                     required: "Selecciona la escuela asignada",
+                },
+                grade_id: {
+                    required: "Selecciona su grado actual",
                 },
 
             },
@@ -265,13 +285,23 @@
         formData.append('type_student', $('#type_student').val());
         formData.append('type_nivel', $('#level').val());
         formData.append('school_id', $('#school_id').val());
-
+        formData.append('grade_id', $('#grade_id').val());
         formData.append('photo', photo);
 
         AJAXSaveStudent(formData, function(res) {
-            const { status } = res;
-            if (status === 'ok')
+            const { status, data } = res;
+            $('#edit-save').prop('disabled', true);
+
+            if (status === 'ok') {
+                $('#edit-save').prop('disabled', false);
                 listStudents($('#filter_school').val());
+                swal("Alumno registrado correctamente.", "", "success");
+            }
+
+            if (status === 'error') {
+                $('#edit-save').prop('disabled', false);
+                swal("Ocurrió un error!", data, "error");
+            }
         })
 
     }
