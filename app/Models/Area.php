@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TipoAlumno extends Model
+class Area extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'tipo_alumno';
-    protected $primaryKey       = 'id_ta';
+    protected $table            = 'areas';
+    protected $primaryKey       = 'id_area';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['ta_descrip'];
+    protected $allowedFields    = ['nombre','status'];
 
     // Dates
     protected $useTimestamps = false;
@@ -35,4 +35,20 @@ class TipoAlumno extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    public function getAreaByStatus ($status = null)
+    {
+        $response = [];
+
+        if ($status === true || $status === false) 
+            $this->where("status", $status);
+  
+        $query = $this->get();
+    
+        if($query->getResultArray())
+            $response = $query->getResultArray();
+        
+        return $response;
+    }   
 }

@@ -5,6 +5,50 @@
 <?= $this->section('content') ?>
 
 <div class="wrapper_boxs">
+
+    <div class="box-content startFlex">
+        <div class="title">
+            <h2>Usuarios</h2>
+            <span>Lista de usuarios registrados</span>
+        </div>
+        <div class="wrapper">
+            <div class="filter-search">
+                <div class="buttons">
+                    <a class="button-a" href="users/create-user">Crear usuario</a>
+                </div>
+                <div class="search-input">
+                    <input type="text" id="search" placeholder="Buscar...">
+                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="dropdown-list">
+                    <select name="dropdown-types" id="dropdown-types">
+                        <option value="">Mostrar todos</option>
+                        <?php foreach ($tipos_usuario as $tipo) : ?>
+                            <option value="<?= $tipo['id_tu'] ?>"><?= $tipo['tu_descrip'] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
+            <div class="table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Usuario</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users_data">
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
     <div class="box-content startFlex">
         <div class="title">
             <h2>Editar datos</h2>
@@ -48,49 +92,6 @@
                     <button class="success" type="button" onclick="onUpdateUser(1)" id="edit-save" disabled>Guardar</button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <div class="box-content startFlex">
-        <div class="title">
-            <h2>Usuarios</h2>
-            <span>Lista de usuarios registrados</span>
-        </div>
-        <div class="wrapper">
-            <div class="filter-search">
-                <div class="buttons">
-                    <a class="button-a" href="users/create-user">Crear usuario</a>
-                </div>
-                <div class="search-input">
-                    <input type="text" id="search" placeholder="Buscar...">
-                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-                <div class="dropdown-list">
-                    <select name="dropdown-types" id="dropdown-types">
-                        <option value="">Mostrar todos</option>
-                        <?php foreach ($tipos_usuario as $tipo) : ?>
-                            <option value="<?= $tipo['id_tu'] ?>"><?= $tipo['tu_descrip'] ?></option>
-                        <?php endforeach ?>
-                    </select>
-                </div>
-            </div>
-            <div class="table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
-                            <th>Usuario</th>
-                            <th>Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="users_data">
-
-                    </tbody>
-                </table>
-
-            </div>
         </div>
     </div>
 </div>

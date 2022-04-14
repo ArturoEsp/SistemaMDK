@@ -62,15 +62,14 @@ class Participante extends Model
 
         if ($type_user && strlen($type_user) > 0) $this->where("id_tu", $type_user);
 
-        $this->orderBy("nombres", "ASC");
-  
+        $this->where("usuario !=", null);
+        $this->orderBy("nombres", "ASC");  
         $query = $this->get();
-    
+
         if($query->getResultArray())
             $response = $query->getResultArray();
         
         return $response;
-    
     }
 
     public function setMenuRol ($type_user = null) {
@@ -128,4 +127,5 @@ class Participante extends Model
 
         return $rules;
     }
+
 }

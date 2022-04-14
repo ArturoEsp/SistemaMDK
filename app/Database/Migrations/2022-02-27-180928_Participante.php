@@ -68,20 +68,26 @@ class Participante extends Migration
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true,
-                'unsigned' => true
+                'unsigned'   => true
             ],
             'id_categoria'   => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true,
-                'unsigned' => true
+                'unsigned'   => true
             ],
-            'id_nivel'   => [
+            'id_nivel'       => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'null'       => true,
+                'unsigned'   => true
+            ],
+            'id_grado'       => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true,
                 'unsigned' => true
-            ]      
+            ]     
         ]);
 
         $this->forge->addKey('id_alumno', true);
@@ -90,6 +96,7 @@ class Participante extends Migration
         $this->forge->addForeignKey('id_ta', 'tipo_alumno', 'id_ta');
         $this->forge->addForeignKey('id_categoria', 'categoria', 'id_categoria');
         $this->forge->addForeignKey('id_nivel', 'nivel', 'id_nivel');
+        $this->forge->addForeignKey('id_grado', 'grados', 'id_grado');
 
         $this->forge->createTable('participantes');
     }

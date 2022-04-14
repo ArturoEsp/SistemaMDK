@@ -55,6 +55,12 @@ h1, h2, h3, h4, span, p, label div, input, textarea, button, a, select, option,t
     font-family: 'Roboto', sans-serif;
 }
 
+p#total {
+    font-size: 0.89rem;
+    font-style: italic;
+    color: var(--color-black);
+}
+
 button:disabled,
 button[disabled]{
   border: 1px solid #999999 !important;
@@ -75,6 +81,12 @@ main.main-content {
     padding: 2rem 6rem;
     width: 100vw;
     
+}
+
+@media screen and (max-width: 1440px) {
+    main.main-content {
+        padding: 2rem 2rem;
+    }
 }
 
 @media screen and (max-width: 768px) {
