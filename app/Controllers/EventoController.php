@@ -8,6 +8,7 @@ use App\Models\Modalidad;
 use App\Models\Escuela;
 use App\Models\EstudiantesEscuela;
 use App\Models\EventoParticipantes;
+use App\Models\Grafica;
 use App\Models\Participante;
 use CodeIgniter\Database\BaseBuilder;
 
@@ -19,6 +20,7 @@ class EventoController extends BaseController
     private $participantesEventoModel;
     private $escuelaEstudiantes;
     private $alumnoModel;
+    private $graficaModel;
 
     public function __construct()
     {
@@ -28,6 +30,7 @@ class EventoController extends BaseController
         $this->participantesEventoModel = new EventoParticipantes();
         $this->escuelaEstudiantes = new EstudiantesEscuela();
         $this->alumnoModel = new Participante();
+        $this->graficaModel = new Grafica();
     }
 
     public function index()
@@ -87,6 +90,27 @@ class EventoController extends BaseController
         return $this->response->setJSON($msgResponse);
     }
 
+    public function update()
+    {
+        try {
+            $event_id = $this->request->getVar('event_id');
+            $date_start = $this->request->getVar('start_date');
+            $date_end = $this->request->getVar('end_date');
+
+            $findEvent = $this->eventoModel->find($event_id);
+            if (!$findEvent) return $this->response->setJSON(['status' => 'error' , 'data' => 'No se encontró el evento.']); 
+            $this->eventoModel->update($event_id, ['fecha_inicio' => $date_start, 'fecha_fin' => $date_end]);
+            $session = session();
+            $event = $this->eventoModel->eventInProcess();
+            $session->set(['event' => $event]);
+
+            return $this->response->setJSON(['status' => 'ok' , 'data' => 'Evento actualizado correctamente.']); 
+
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error' , 'data' => $ex->getMessage()]);
+        }
+    }
+
     public function registerParticipantes()
     {
         $msgResponse = ['status' => 'ok', 'data' => ''];
@@ -131,16 +155,109 @@ class EventoController extends BaseController
         return $this->response->setJSON($msgResponse);
     }
 
+    public function getAllParticipantesByCurrentEvent()
+    {
+        try {
+
+            $modalidad_id = $this->request->getVar('mod_id');
+            $event = session('event');
+                if (!$event) return $this->response->setJSON(['status' => 'error' , 'data' => 'No hay un evento en proceso.']);
+
+            $participantes = $this->participantesEventoModel
+                ->select('
+                    evento_participantes.id as RegistroID,
+                    evento_participantes.status as StatusParticipante,
+
+                    PART.nombres as NombreParticipante,
+                    PART.apellidos as ApellidosParticipante,
+                    PART.edad as EdadParticipante,
+                    PART.altura as AlturaParticipante,
+                    PART.peso as PesoParticipante,
+                    PART.fotografia as FotoParticipante,
+
+                    NIVEL.descrip_niv AS NombreNivel,
+                    NIVEL.rango AS RangoNivel,
+
+                    MOD.id_modalidad as ModalidadID,
+                    MOD.modalidad as NombreModalidad,
+                    ESCUELA.nombre as NombreEscuela
+                ')
+                ->join('participantes PART', 'PART.id_alumno = evento_participantes.id_participante')
+                ->join('modalidades MOD', 'MOD.id_modalidad = evento_participantes.id_modalidad')
+                ->join('nivel NIVEL', 'NIVEL.id_nivel = PART.id_nivel')
+
+                ->join('estudiantes_escuela EE', 'EE.id_estudiante = evento_participantes.id_participante')
+                ->join('escuelas ESCUELA', 'ESCUELA.id_escuela = EE.id_escuela')
+                ->where('evento_participantes.id_evento', $event['id'])
+                ->findAll();
+
+            return $this->response->setJSON(['status' => 'ok' , 'data' => $participantes]);
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error' , 'data' => $ex->getMessage()]);
+        }
+    }
+
+    public function getAllParticipantesByEventForGrafica($id_grafica)
+    {
+        try {
+            $event = session('event');
+            if (!$event) return $this->response->setJSON(['status' => 'error' , 'data' => 'No hay un evento en proceso.']);
+
+            $grafica = $this->graficaModel->find($id_grafica);
+            if (!$grafica) return $this->response->setJSON(['status' => 'error' , 'data' => 'No se encontró la gráfica.']);
+
+            $participantes = $this->participantesEventoModel
+                ->select('
+                    evento_participantes.id as RegistroID,
+                    evento_participantes.status as StatusParticipante,
+                    PART.nombres as NombreParticipante,
+                    PART.apellidos as ApellidosParticipante,
+                    PART.edad as EdadParticipante,
+                    PART.altura as AlturaParticipante,
+                    PART.peso as PesoParticipante,
+                    PART.fotografia as FotoParticipante,
+                    ESCUELA.nombre as NombreEscuela
+                ')
+                ->join('participantes PART', 'PART.id_alumno = evento_participantes.id_participante')
+
+                ->join('estudiantes_escuela EE', 'EE.id_estudiante = evento_participantes.id_participante')
+                ->join('escuelas ESCUELA', 'ESCUELA.id_escuela = EE.id_escuela')
+
+                ->where('evento_participantes.id_evento', $event['id'])
+                ->where('PART.id_nivel', $grafica['nivel_id'])
+                ->where('evento_participantes.id_modalidad', $grafica['modalidad_id'])
+                ->findAll();
+            return $this->response->setJSON(['status' => 'ok' , 'data' => $participantes]);
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error' , 'data' => $ex->getMessage()]);
+        }
+    }
+
     public function getParticipantesInEventBySchoolAndMod($id_escuela, $id_mod)
     {
         $msgResponse = ['status' => 'ok', 'data' => ''];
         try {
 
             $findStudents = $this->escuelaEstudiantes->where('id_escuela', $id_escuela)->findAll();
-
             $arrayStudents = [];
 
             foreach ($findStudents as $student) {
+                $find = $this->participantesEventoModel
+                    ->select('
+                        *
+                    ')
+                    ->join('participantes PART', 'PART.id_alumno = evento_participantes.id_participante')
+
+                    ->where('evento_participantes.id_modalidad', $id_mod)
+                    ->where('evento_participantes.id_participante', $student['id_estudiante'])
+                    ->first();
+
+                if ($find) {
+                    array_push($arrayStudents, $find);
+                }
+            }
+
+            /* foreach ($findStudents as $student) {
                 $find = $this->alumnoModel->select('
                      participantes.id_alumno,
                      participantes.nombres,
@@ -169,8 +286,9 @@ class EventoController extends BaseController
                 if ($find) {
                     array_push($arrayStudents, $find);
                 }
-            }
+            } */
 
+       
             $msgResponse['data'] = $arrayStudents;
 
             return $this->response->setJSON($msgResponse);
@@ -202,5 +320,53 @@ class EventoController extends BaseController
         }
 
         return $this->response->setJSON($msgResponse);
+    }
+
+    public function getGraficasByEventoId($event_id)
+    {
+        try {
+            $graficas = $this->graficaModel
+                ->join('modalidades as MOD', 'MOD.id_modalidad = graficas.modalidad_id')
+                ->where('evento_id', $event_id)->findAll();
+            return $this->response->setJSON(['status' => 'ok' , 'data' => $graficas]);
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error' , 'data' => $ex->getMessage()]);
+        }
+    }
+
+    public function cancelEvent($event_id)
+    {
+        try {
+            $session = session();
+            $findEvent = $this->eventoModel->find($event_id);
+            if (!$findEvent) return $this->response->setJSON(['status' => 'error' , 'data' => 'No se encontró el evento.']);
+            $this->eventoModel->update($event_id, ['status' => 0]);
+            $session->remove('event');
+            return $this->response->setJSON(['status' => 'ok' , 'data' => 'Evento cancelado correctamente']);
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error' , 'data' => $ex->getMessage()]);
+        }
+    }
+
+    public function getInfoParticipanteById ($id_registro) 
+    {
+        try {
+            $find = $this->participantesEventoModel
+                ->select('
+                    PART.id_alumno as ParticipanteId,
+                    PART.nombres as ParticipanteNombre,
+                    PART.apellidos as ParticipanteApellidos,
+                    PART.edad as ParticipanteEdad,
+                    PART.altura as ParticipanteAltura,
+                    PART.peso as ParticipantePeso,
+                ')
+                ->join('participantes PART', 'PART.id_alumno = evento_participantes.id_participante')
+                ->where('evento_participantes.id', $id_registro)
+                ->first();
+
+            return $this->response->setJSON(['status' => 'ok' , 'data' =>  $find]);
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error' , 'data' => $ex->getMessage()]);
+        }
     }
 }

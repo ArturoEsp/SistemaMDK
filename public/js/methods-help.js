@@ -231,12 +231,35 @@ function AJAXGetAllAreas (callBack) {
     });
 }
 
+function AJAXGetAllAreasEnabled (callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/areas/enabled`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
 // Eventos
 function AJAXSaveEvent (data, callBack) {
     $.ajax({
         method: 'POST',
         data: data,
         url: `${base_url}/eventos/save`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXUpdateEvent (data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: `${base_url}/eventos/update`,
         dataType: "json",
         success: function(res) {
             callBack(res);
@@ -289,8 +312,71 @@ function AJAXDeleteParticipanteEvent (registro_id, callBack) {
     });
 }
 
+function AJAXGetGraficasByEventId (event_id, callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/eventos/${event_id}/graficas`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
 
-// Eventos
+function AJAXCancelEvent (event_id, callBack) {
+    $.ajax({
+        method: 'POST',
+        url: `${base_url}/eventos/cancel/${event_id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXGetAllParticipantesEvent (callBack, divLoading)  {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/eventos/participantes/all`,
+        dataType: "json",
+        beforeSend: function () { 
+            $(`#${divLoading}`).addClass('loading')
+        },
+        success: function(res) {
+           callBack(res);
+           $(`#${divLoading}`).removeClass('loading')
+        }
+    });
+}
+
+function AJAXGetParticipanteInfoById (id_registro, callBack, divLoading)  {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/eventos/participante/${id_registro}`,
+        dataType: "json",
+        beforeSend: function () { 
+            $(`#${divLoading}`).addClass('loading')
+        },
+        success: function(res) {
+           callBack(res);
+           $(`#${divLoading}`).removeClass('loading')
+        }
+    });
+}
+
+function AJAXGetParticipantesForGrafica(grafica_id, callBack) {
+    $.ajax({
+        method: 'GET',
+        url: `${base_url}/eventos/participantes/grafica/${grafica_id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+
+// Graficas
 
 function AJAXParticipantesParamsGrafica(data, callBack) {
     $.ajax({
@@ -316,10 +402,26 @@ function AJAXCreateGrafica(data, callBack) {
     });
 }
 
-function AJAXGetMatchsGrafica(id, callBack) {
+function AJAXGetMatchsGrafica(id, callBack, divLoading) {
     $.ajax({
         method: 'GET',
         url: `${base_url}/graficas/info/${id}`,
+        dataType: "json",
+        beforeSend: function () { 
+            $(`#${divLoading}`).addClass('loading')
+        },
+        success: function(res) {
+           callBack(res);
+           $(`#${divLoading}`).removeClass('loading')
+        }
+    });
+}
+
+
+function AJAXUpdateCancelGrafica(grafica_id, callBack) {
+    $.ajax({
+        method: 'POST',
+        url: `${base_url}/graficas/cancel/${grafica_id}`,
         dataType: "json",
         success: function(res) {
             callBack(res);
@@ -327,11 +429,35 @@ function AJAXGetMatchsGrafica(id, callBack) {
     });
 }
 
+function AJAXUpdateSaveGrafica(grafica_id, callBack) {
+    $.ajax({
+        method: 'POST',
+        url: `${base_url}/graficas/save/${grafica_id}`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+// Matchs
 function AJAXUpdateMatch(data, callBack) {
     $.ajax({
         method: 'POST',
         data: data,
         url: `${base_url}/matchs/update`,
+        dataType: "json",
+        success: function(res) {
+            callBack(res);
+        }
+    });
+}
+
+function AJAXSaveScoresMatch(data, callBack) {
+    $.ajax({
+        method: 'POST',
+        data: data,
+        url: `${base_url}/matchs/scores`,
         dataType: "json",
         success: function(res) {
             callBack(res);

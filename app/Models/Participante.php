@@ -27,6 +27,7 @@ class Participante extends Model
                                     'id_tu',
                                     'id_ta',
                                     'id_categoria',
+                                    'id_grado',
                                     'id_nivel'];
 
     // Dates

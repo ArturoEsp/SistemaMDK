@@ -10,7 +10,7 @@
         <span>Ingresa los datos</span>
     </div>
     <div class="wrapper">
-        <form method="post" class="Form max768" id="create_event">
+        <form method="post" class="Form max768" id="create_grafica">
             <div class="input">
                 <label for="name">Nombre</label>
                 <input type="text" name="name" id="name" placeholder="Nombre de la grafica">
@@ -65,7 +65,6 @@
     function totalParticipantes (mod_id, nivel_id, genre) {
         AJAXParticipantesParamsGrafica({mod_id, nivel_id, genre}, function (res) {
             const { status, data } = res;
-            console.log(data);
             if (status === 'ok') {
                 const total = data.length;
                 _totalParticipantes = data.length;
@@ -83,8 +82,22 @@
             number_participants: $('#number_participants').val(),
         };
         
+        if ($('#name').val() === '') return swal("Ingresa el nombre de la gráfica", "", "error");
+
         AJAXCreateGrafica(data, function (res) {
-            console.log(res);
+            const { status, data } = res;
+            if (status === 'ok') {
+                $('.success').prop('disabled', false);
+                swal("Gráfica creada correctamente.", "", "success")
+                .then(function() { 
+                    document.location.reload();
+                });
+            }
+
+            if (status === 'error') {
+                $('#edit-save').prop('disabled', false);
+                swal("Ocurrió un error!", data, "error");
+            }
         })
     }
     
@@ -116,6 +129,7 @@
             const nivel_id = $('#nivel_id').val();
             totalParticipantes(mod_id, nivel_id, this.value);
         });
+
 
     });
 </script>

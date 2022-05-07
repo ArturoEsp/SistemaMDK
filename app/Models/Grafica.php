@@ -14,7 +14,7 @@ class Grafica extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['nombre', 'modalidad_id', 'nivel_id', 'evento_id', 'ganador_id', 'no_participantes', 'status'];
+    protected $allowedFields    = ['nombre', 'modalidad_id', 'nivel_id', 'evento_id', 'ganador_id', 'no_participantes', 'status', 'editable'];
 
     // Dates
     protected $useTimestamps = false;

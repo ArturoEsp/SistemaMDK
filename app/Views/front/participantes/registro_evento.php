@@ -65,7 +65,6 @@ $modalidades = $session['modalidades'];
     function listStudents(id = null, id_mod = null) {
         AJAXGetAvailablesStudents(id, id_mod, function(res) {
             const data = res.data;
-            console.log(data);
             $('#select-students').empty();
             if (data.length > 0) {
                 for (let i = 0; i < data.length; i++) {
@@ -108,8 +107,8 @@ $modalidades = $session['modalidades'];
                                     }</span>
                                 </div>
                                 <div class="buttons">
-                                    ${e.status !== 'ASIGNADO' && 
-                                        `<button onclick='onDeleteParticipante(${e.id_registro})' class='delete'><i class='fa-solid fa-trash'></i></button>`
+                                    ${e.status !== 'ASIGNADO' ?
+                                        `<button onclick='onDeleteParticipante(${e.id_registro})' class='delete'><i class='fa-solid fa-trash'></i></button>` : ''
                                     }
                                 </div>
                             </div>

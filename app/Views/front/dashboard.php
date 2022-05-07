@@ -27,7 +27,7 @@ $session = session();
         </div>
     <?php endif; ?>
 
-    <?php if ($session->get('menu')['areas']) : ?>
+<!--     <?php if ($session->get('menu')['areas']) : ?>
         <div class="box-content startFlex">
             <div class="title">
                 <h2>Gráficas</h2>
@@ -39,7 +39,7 @@ $session = session();
                 </div>
             </div>
         </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
     <?php if ($session->get('menu')['areas']) : ?>
         <div class="box-content startFlex">

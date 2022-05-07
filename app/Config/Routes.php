@@ -81,6 +81,7 @@ $routes->group('/participantes', function ($routes) {
 $routes->group('/areas', function ($routes) {
     $routes->post('save', 'AreaController::store');
     $routes->get('all', 'AreaController::getAllAreas');
+    $routes->get('enabled', 'AreaController::getAllAreasEnabled');
     $routes->post('update/(:num)', 'AreaController::update/$1');
     $routes->delete('delete/(:num)', 'AreaController::delete/$1');
 
@@ -91,10 +92,16 @@ $routes->group('/areas', function ($routes) {
 
 $routes->group('/eventos', function ($routes) {
     $routes->post('save', 'EventoController::store');
+    $routes->post('update', 'EventoController::update');
+    $routes->post('cancel/(:num)', 'EventoController::cancelEvent/$1');
     $routes->get('escuela/(:num)/mod/(:num)/participantes-disponibles', 'AlumnoController::getParticipantesForEvent/$1/$2');
     $routes->get('escuela/(:num)/participantes/mod/(:num)', 'EventoController::getParticipantesInEventBySchoolAndMod/$1/$2');
     $routes->post('register', 'EventoController::registerParticipantes');
     $routes->delete('participante/(:num)', 'EventoController::deleteParticipanteEvento/$1');
+    $routes->get('(:num)/graficas', 'EventoController::getGraficasByEventoId/$1');
+    $routes->get('participantes/grafica/(:num)', 'EventoController::getAllParticipantesByEventForGrafica/$1');
+    $routes->get('participantes/all', 'EventoController::getAllParticipantesByCurrentEvent');
+    $routes->get('participante/(:num)', 'EventoController::getInfoParticipanteById/$1');
 
     // Views
     $routes->get('', 'EventoController::index', ['filter' => 'authFilter']);
@@ -105,6 +112,8 @@ $routes->group('/graficas', function ($routes) {
 
     $routes->post('participantes/params', 'GraficaController::getParticipantesForParams');
     $routes->post('store', 'GraficaController::store');
+    $routes->post('cancel/(:num)', 'GraficaController::updateCancel/$1');
+    $routes->post('save/(:num)', 'GraficaController::updateSave/$1');
     $routes->get('info/(:num)', 'GraficaController::getGraficaMatchs/$1');
 
     // Views
@@ -116,6 +125,7 @@ $routes->group('/graficas', function ($routes) {
 
 $routes->group('/matchs', function ($routes) {
     $routes->post('update', 'MatchController::update');
+    $routes->post('scores', 'MatchController::saveScores');
 });
 
 /*

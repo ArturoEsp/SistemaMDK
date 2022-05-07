@@ -10,7 +10,7 @@ class Evento extends Model
 {
     protected $DBGroup          = 'default';
     protected $table            = 'eventos';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'id_evento';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
     protected $returnType       = 'array';

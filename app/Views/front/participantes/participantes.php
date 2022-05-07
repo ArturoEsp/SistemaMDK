@@ -132,9 +132,7 @@
     function listStudents(id = null) {
 
         AJAXStudentsBySchool(id, function(res) {
-
             const data = res.data;
-            console.log(data)
             $('#students').empty();
             for (let i = 0; i < data.length; i++) {
                 const e = data[i];
@@ -288,7 +286,7 @@
         formData.append('grade_id', $('#grade_id').val());
         formData.append('photo', photo);
 
-        AJAXSaveStudent(formData, function(res) {
+       AJAXSaveStudent(formData, function(res) {
             const { status, data } = res;
             $('#edit-save').prop('disabled', true);
 
@@ -303,7 +301,6 @@
                 swal("Ocurrió un error!", data, "error");
             }
         })
-
     }
 </script>
 

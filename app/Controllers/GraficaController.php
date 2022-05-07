@@ -43,28 +43,9 @@ class GraficaController extends BaseController
     public function view_grafica($id_grafica) 
     {
         $grafica = $this->graficaModel->find($id_grafica);
-        $matchs = $this->matchModel
-            ->select('
-                matchs.no_match as no_match,
-                PART.nombres as right_player_nombre,
-                PART2.nombres as left_player_nombre,
-
-                matchs.score_right as right_player_score,
-                matchs.score_left as left_player_score,
-            ')
-            ->join('evento_participantes as EV', 'EV.id = matchs.right_player')
-            ->join('evento_participantes as EV2', 'EV2.id = matchs.left_player')
-
-            ->join('participantes as PART', 'PART.id_alumno = EV.id_participante')
-            ->join('participantes as PART2', 'PART2.id_alumno = EV2.id_participante')
-            
-            ->where('grafica_id', $id_grafica)
-            ->orderBy('matchs.no_match', 'ASC')
-            ->findAll();
 
         $data = [
-            'grafica' => $grafica,
-            'matchs' => $matchs
+            'grafica' => $grafica
         ];
 
         return view('front/graficas/view_grafica', $data);
@@ -72,11 +53,18 @@ class GraficaController extends BaseController
 
     public function edit_grafica($id_grafica)
     {
-        $grafica = $this->graficaModel->find($id_grafica);
-        $data = [
-            'grafica' => $grafica
-        ];
-        return view('front/graficas/edit_grafica', $data);
+        $grafica = $this->graficaModel
+            ->join('nivel', 'nivel.id_nivel = graficas.nivel_id')
+            ->join('modalidades', 'modalidades.id_modalidad = graficas.modalidad_id')
+            ->find($id_grafica);
+
+        $data = ['grafica' => $grafica];
+        
+        if ($grafica['editable']) {
+            return view('front/graficas/edit_grafica', $data);
+        }
+
+        return view('front/graficas/edit_score_grafica', $data);
     }
 
     public function getGraficaMatchs($id_grafica)
@@ -89,23 +77,12 @@ class GraficaController extends BaseController
                 AREAS.nombre as nombre_area,
                 GRAFICA.no_participantes,
 
-                EV.id as right_player_registro_id,
-                EV2.id as left_player_registro_id,
+                matchs.left_player,
+                matchs.right_player,
                 
-                PART.nombres as right_player_nombre,
-                PART2.nombres as left_player_nombre,
-
-                PART.apellidos as right_player_apellidos,
-                PART2.apellidos as left_player_apellidos,
-    
-                matchs.score_right as right_player_score,
-                matchs.score_left as left_player_score,
+                matchs.score_right,
+                matchs.score_left,
             ')
-            ->join('evento_participantes as EV', 'EV.id = matchs.right_player')
-            ->join('evento_participantes as EV2', 'EV2.id = matchs.left_player')
-    
-            ->join('participantes as PART', 'PART.id_alumno = EV.id_participante')
-            ->join('participantes as PART2', 'PART2.id_alumno = EV2.id_participante')
 
             ->join('areas as AREAS', 'AREAS.id_area = matchs.id_area')
             ->join('graficas as GRAFICA', 'GRAFICA.id = matchs.grafica_id')
@@ -155,6 +132,7 @@ class GraficaController extends BaseController
         }
     }
 
+
     public function store()
     {
         try {
@@ -173,13 +151,6 @@ class GraficaController extends BaseController
             if (!$participantes) return $this->response->setJSON(['status' => 'error', 'data' => 'No hay participantes disponibles.']);
             if (!$areas) return $this->response->setJSON(['status' => 'error', 'data' => 'No hay areas disponibles para crear matchs.']);
 
-            $grafica = $this->graficaModel->insert([
-                'nombre' => $this->request->getVar('name'),
-                'modalidad_id' => $mod_id,
-                'nivel_id' => $nivel_id,
-                'evento_id' => $eventoActual['id'],
-                'no_participantes' => $this->request->getVar('number_participants'),
-            ], true);
 
             $data = [
                 'no_participantes' => $this->request->getVar('number_participants'),
@@ -189,6 +160,19 @@ class GraficaController extends BaseController
 
             $matchs = $this->matchModel->createMatchs($data);
             $no_match = 1;
+
+            if (count($matchs) === 0) {
+                return $this->response->setJSON(['status' => 'error', 'data' => 'No se pude generar de manera automática los matchs.']);
+            }
+
+            $grafica = $this->graficaModel->insert([
+                'nombre' => $this->request->getVar('name'),
+                'modalidad_id' => $mod_id,
+                'nivel_id' => $nivel_id,
+                'evento_id' => $eventoActual['id'],
+                'no_participantes' => $this->request->getVar('number_participants'),
+            ], true);
+
             foreach ($matchs as $match) {
                 $this->matchModel->insert([
                     'no_match' => $no_match,
@@ -196,9 +180,14 @@ class GraficaController extends BaseController
                     'left_player' => $match['left_player'],
                     'right_player' => $match['right_player'],
                     'grafica_id' => $grafica,
-                ]);
-
+                ]); 
                 $no_match++;
+                if ($match['left_player'])
+                    $this->participantesEventoModel->update($match['left_player'], ['status' => 'ASIGNADO']);
+                
+                if ($match['right_player']) 
+                    $this->participantesEventoModel->update($match['right_player'], ['status' => 'ASIGNADO']); 
+                
             }
 
             return $this->response->setJSON(['status' => 'ok', 'data' => 'Grafica creada correctamente.']);
@@ -211,6 +200,42 @@ class GraficaController extends BaseController
     public function update () 
     {
         try {
+
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error', 'data' => $ex->getMessage()]);
+        }
+    }
+
+    public function updateCancel($grafica_id)
+    {
+        try {
+            $find = $this->graficaModel->find($grafica_id);
+            if (!$find) return $this->response->setJSON(['status' => 'error', 'data' => 'No se encontró la gráfica.']);
+
+            $matchs = $this->matchModel->where('grafica_id', $grafica_id)->findAll();
+
+            foreach ($matchs as $match) {
+                $this->participantesEventoModel->update($match['right_player'], ['status' => 'NO_ASIGNADO']);
+                $this->participantesEventoModel->update($match['left_player'], ['status' => 'NO_ASIGNADO']);
+
+                $this->matchModel->delete($match['id']);
+            }
+
+            $this->graficaModel->update($grafica_id, ['status' => 'CANCELADO', 'editable' => false]);
+            return $this->response->setJSON(['status' => 'ok', 'data' => 'Actualización correcta.']);
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error', 'data' => $ex->getMessage()]);
+        }
+    }
+
+    public function updateSave($grafica_id)
+    {
+        try {
+            $find = $this->graficaModel->find($grafica_id);
+            if (!$find) return $this->response->setJSON(['status' => 'error', 'data' => 'No se encontró la gráfica.']);
+            
+            $this->graficaModel->update($grafica_id, ['editable' => false]);
+            return $this->response->setJSON(['status' => 'ok', 'data' => 'Actualización correcta.']);
 
         } catch (\Exception $ex) {
             return $this->response->setJSON(['status' => 'error', 'data' => $ex->getMessage()]);

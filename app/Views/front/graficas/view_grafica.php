@@ -7,26 +7,12 @@
 <div class="wrapper_boxs">
 
 
-    <div class="demo"></div>
-
-    <!-- <div class="box-content">
+    <div class="view_grafica">
         <div class="title">
-            <h2>Evento</h2>
-            <span>Selecciona el evento para administrar sus graficas</span>
+            <h2><?= $grafica['nombre'] ?></h2>
         </div>
-        <div class="wrapper">
-          
-        </div>
+        <div class="demo"></div>
     </div>
-
-    <div class="box-content startFlex">
-        <div class="title">
-            <h2>Gráficas</h2>
-            <span>Lista de participantes de mis escuelas</span>
-        </div>
-        <div class="wrapper">
-        </div>
-    </div> -->
 </div>
 
 <script>
@@ -48,44 +34,90 @@
     }
 
     $(document).ready(function() {
-        AJAXGetMatchsGrafica(<?= $grafica['id'] ?>, function(res) {
-            console.log(res);
+        
 
+        AJAXGetMatchsGrafica(<?= $grafica['id'] ?>, function(res) {
             const { status, data } = res;
 
             if (status === 'ok') {
                 let dataSingleElimination = { 
                     teams: [], 
-                    results : [
-                            /* [[1,2], [3, null]],       
-                            [[4,6], [2,1]]   */      
-                        ] };
+                    results : [] 
+                };
 
-                for (let i = 0; i < data.length - 1; i++) {
+                for (let i = 0; i < data.length; i++) {
                     const e = data[i];
                     const match = [];
                     const no_match = parseInt(e.no_match);
                     const no_participantes = parseInt(e.no_participantes);
 
                     let playerLeft = null, playerRight = null;
-                    if (e.left_player_nombre) playerLeft = `${e.left_player_nombre} ${e.left_player_apellidos}`;
-                    if (e.right_player_nombre) playerRight = `${e.right_player_nombre} ${e.right_player_apellidos}`;
+
+                    if (no_participantes === 4) {
+                        if (no_match > 2) break;
+                    }
+
+                    if (no_participantes === 8) {
+                        if (no_match > 4) break;
+                    }
+
+                    if (e.left_player)  {
+                        var result = $.ajax({
+                            url: `${base_url}/eventos/participante/${e.left_player}`,
+                            'async': false,
+                            type: 'GET'
+                        })
+                        .done(function(data) {
+                            const { data: dataParticipante, status } = data;
+                            if (status === 'ok')
+                                playerLeft = `${dataParticipante.ParticipanteNombre} ${dataParticipante.ParticipanteApellidos}`;
+                        })
+                    }
+
+                    if (e.right_player)  {
+                        var result = $.ajax({
+                            url: `${base_url}/eventos/participante/${e.right_player}`,
+                            'async': false,
+                            type: 'GET'
+                        })
+                        .done(function(data) {
+                            const { data: dataParticipante, status } = data;
+                            if (status === 'ok')
+                                playerRight = `${dataParticipante.ParticipanteNombre} ${dataParticipante.ParticipanteApellidos}`;
+                        })
+                    }
 
                     match.push(playerLeft)
                     match.push(playerRight)
 
-                    const positionArray = getPositionArray(no_participantes, e.no_match);
-                    const score_left = e.left_player_score ? parseFloat(e.left_player_score) : null; 
-                    const score_right = e.right_player_score ? parseFloat(e.right_player_score) : null; 
-
-                    const scores = [score_left, score_right];
-                    dataSingleElimination.results.push([]);
-                    dataSingleElimination.results[positionArray].push(scores); 
-
                     dataSingleElimination.teams.push(match);
+
                 }
 
-               console.log(dataSingleElimination.results);
+                for (let i = 0; i < data.length; i++) {
+                    const e = data[i];
+                    const no_match = parseInt(e.no_match);
+                    const no_participantes = parseInt(e.no_participantes);
+
+                    const positionArray = getPositionArray(no_participantes, e.no_match);
+                    const score_left = e.score_left ? parseFloat(e.score_left) : null; 
+                    const score_right = e.score_right ? parseFloat(e.score_right) : null; 
+                        
+                    const scores = [score_left, score_right];
+
+
+                    if(typeof dataSingleElimination.results[positionArray] === 'undefined') {
+                        console.log('no existe');
+                        dataSingleElimination.results.push([])
+                        dataSingleElimination.results[positionArray].push(scores)
+                    }
+                    else {
+                        dataSingleElimination.results[positionArray].push(scores)
+                    }
+                    
+                }
+
+                console.log(dataSingleElimination.results);
                 $('.demo').bracket({
                     skipConsolationRound: true,
                     init: dataSingleElimination,

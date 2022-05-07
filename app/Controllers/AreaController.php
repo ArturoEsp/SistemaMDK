@@ -89,4 +89,14 @@ class AreaController extends BaseController
         }
         return $this->response->setJSON($msgResponse);
     }
+
+    public function getAllAreasEnabled()
+    {
+        try {
+            $area = new Area();
+            return $this->response->setJSON(['status' => 'ok', 'data' => $area->getAreaByStatus(true)]);
+        } catch (\Exception $ex) {
+            return $this->response->setJSON(['status' => 'error', 'data' => $ex->getMessage()]);
+        }
+    }
 }

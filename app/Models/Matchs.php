@@ -46,42 +46,56 @@ class Matchs extends Model
         $no_participantes = (int)$data['no_participantes'];
         $participantes = $data['participantes'];
         $matchs = [];
-        $total_areas = count($areas);
+        $total_areas = count($areas) - 1;
 
         $default_altura = 10;
 
         foreach ($participantes as $left_player) {
+            $is_assigned = false;
+
             foreach ($participantes as $right_player) {
+
                 $diff_altura = abs((int)$left_player['altura'] - (int)$right_player['altura']);
                 $diff_grado = abs((int)$left_player['id_grado'] - (int)$right_player['id_grado']);
+                
+                if ((float)$left_player['peso'] >= (float)$right_player['min_rango'] &&
+                    (float)$left_player['peso'] <= (float)$right_player['max_rango']) {
 
-                if (
-                    (float)$left_player['peso'] >= (float)$right_player['min_rango'] &&
-                    (float)$left_player['peso'] <= (float)$right_player['max_rango']
-                ) {
-                    if (
-                        $diff_altura <= $default_altura &&
-                        $left_player['id_registro'] !== $right_player['id_registro'] && $diff_grado <= 2
-                    ) {
+                    if ($diff_altura <= $default_altura && $left_player['id_registro'] !== $right_player['id_registro'] && $diff_grado <= 2) {
 
                         $data = [
                             "left_player" => $left_player['id_registro'],
                             "right_player" => $right_player['id_registro'],
-                            "area" => $areas[rand(1, $total_areas)]['id_area']
+                            "area" => $areas[rand(0, $total_areas)]['id_area']
                         ];
 
                         $exist = $this->existParticipantesInMatch($matchs, $data);
 
-                        if ($no_participantes !== (count($matchs) * 2) && !$exist) {
+                        if (((count($matchs) * 2) < $no_participantes) && !$exist) {
                             array_push($matchs, $data);
+                            $is_assigned = true;
                             break;
                         }
                     }
                 }
             }
+
+            if ($is_assigned === false) {
+                $data = [
+                    "left_player" => $left_player['id_registro'],
+                    "right_player" => NULL,
+                    "area" => $areas[rand(0, $total_areas)]['id_area']
+                ];
+                $exist = $this->existParticipantesInMatch($matchs, $data);
+
+                if (((count($matchs) * 2) < $no_participantes) && !$exist) {
+                    array_push($matchs, $data);
+                }
+            }
+            
+            if ($no_participantes === (count($matchs) * 2)) break;
         }
-
-
+        
         return $matchs;
     }
 
@@ -104,6 +118,7 @@ class Matchs extends Model
             case 4: {
                     if ($no_match === 1) return 3;
                     if ($no_match === 2) return 3;
+                    return 0;
                 }
             case 8: {
                     if ($no_match === 1) return 5;
@@ -114,6 +129,8 @@ class Matchs extends Model
 
                     if ($no_match === 5) return 7;
                     if ($no_match === 6) return 7;
+
+                    return 0;
                 }
             case 16: {
 
@@ -137,6 +154,8 @@ class Matchs extends Model
 
                     if ($no_match === 13) return 15;
                     if ($no_match === 14) return 15;
+
+                    return 0;
                 }
         }
     }
@@ -152,16 +171,15 @@ class Matchs extends Model
 
         $no_match = (int)$findMatch['no_match'];
         $no_participantes = (int)$grafica['no_participantes'];
-        $total_areas = count($areas);
-        $id_area = $areas[rand(1, $total_areas)]['id_area'];
-
-        error_log("count: $total_areas");
-        error_log("area: $id_area");
+        $total_areas = count($areas) - 1;
+        $id_area = $areas[rand(0, $total_areas)]['id_area'];
 
         if ($score_left > 0 && $score_right > 0) {
 
             $winner = ($score_left > $score_right) ? $player_left :  $player_right;
             $next_match = $this->nextSegmentMatch($no_participantes, $no_match);
+
+            if (!$next_match || $next_match === 0) return false;
 
             $findMatchWithNumber = $this->where('no_match', $next_match)->first();
 
@@ -173,7 +191,6 @@ class Matchs extends Model
                     'grafica_id' => $grafica['id'],
                 ]);
             } else {
-                error_log('Si existe el match con numer');
                 if ($findMatchWithNumber['left_player'] === NULL) {
                     $this->update($findMatchWithNumber['id'], ['left_player' => $winner]);
                 }

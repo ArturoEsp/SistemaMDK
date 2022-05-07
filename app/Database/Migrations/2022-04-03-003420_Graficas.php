@@ -34,11 +34,9 @@ class Graficas extends Migration
                 'constraint'     => 11,
                 'unsigned'       => true,
             ],
-            'ganador_id'         => [
-                'type'           => 'INT',
-                'constraint'     => 11,
-                'unsigned'       => true,
-                'null'           => true,
+            'editable'         => [
+                'type'           => 'BOOLEAN',
+                'default'        => true,
             ],
             'no_participantes'  => [
                 'type'           => 'INT',
@@ -56,7 +54,6 @@ class Graficas extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('evento_id', 'eventos', 'id_evento');
         $this->forge->addForeignKey('modalidad_id', 'modalidades', 'id_modalidad');
-        $this->forge->addForeignKey('ganador_id', 'participantes', 'id_alumno');
         $this->forge->addForeignKey('nivel_id', 'nivel', 'id_nivel');
 
         $this->forge->createTable('graficas');
